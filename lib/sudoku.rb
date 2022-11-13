@@ -1,5 +1,4 @@
 class Sudoku
-
   def initialize(puzzle_string)
     @puzzle_string = puzzle_string
   end
@@ -10,7 +9,7 @@ class Sudoku
   end
 
   def valid?
-    valid_version?(matrix) && valid_version?(transposed_matrix) && valid_version?(subgroup_matrix)
+    [matrix, transposed_matrix, subgroup_matrix].map(&method(:valid_version?)).all?(true)
   end
 
   private
@@ -26,12 +25,11 @@ class Sudoku
   end
 
   def subgroup_matrix
-    matrix.map { |row| row.each_slice(3).to_a }
+    matrix.map { |row| row.each_slice(3) }
           .each_slice(3)
-          .to_a
           .map { |(first_row, second_row, third_row)| first_row.zip(second_row, third_row) }
           .flatten(1)
-          .map { |row| row.flatten }
+          .map(&:flatten)
   end
 
   def valid_version?(matrix)
@@ -41,14 +39,11 @@ class Sudoku
     true
   end
 
-  def row_valid? (row)
+  def row_valid?(row)
     row.each do |element|
       next if element == '0'
       return false if !element.to_i.between?(1, 9) || row.count(element) != 1
     end
     true
   end
-
-
 end
-

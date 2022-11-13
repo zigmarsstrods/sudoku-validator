@@ -12,11 +12,9 @@ class Validator
   def validate
     sudoku = Sudoku.new(@puzzle_string)
     if sudoku.valid?
-      if sudoku.complete?
-        return 'Sudoku is valid.'
-      else
-        return 'Sudoku is valid but incomplete.'
-      end
+      return 'Sudoku is valid.' if sudoku.complete?
+
+      'Sudoku is valid but incomplete.'
     else
       'Sudoku is invalid.'
     end
